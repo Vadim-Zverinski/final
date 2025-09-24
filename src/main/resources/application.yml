@@ -1,0 +1,52 @@
+#JWT
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 3600000
+  refresh-expiration: 604800000
+
+
+#DATABASE
+spring:
+  application:
+    name: final
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Final
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  #MAIL
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: <MailAdress>
+    password: ${GMAIL_APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+#SECURITY
+security:
+  whitelist:
+    - "/cabinet/registration"
+    - "/cabinet/verification"
+    - "/cabinet/login"
+
+
+
+#SERVER
+server:
+  port: 8080
+  error:
+    include-message: always

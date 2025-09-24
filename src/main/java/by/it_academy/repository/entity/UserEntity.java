@@ -1,7 +1,7 @@
 package by.it_academy.repository.entity;
 
-import by.it_academy.DTO.enums.UserRole;
-import by.it_academy.DTO.enums.UserStatus;
+import by.it_academy.dto.enums.UserRole;
+import by.it_academy.dto.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

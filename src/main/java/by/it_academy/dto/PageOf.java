@@ -1,4 +1,4 @@
-package by.it_academy.DTO;
+package by.it_academy.dto;
 
 import lombok.Builder;
 import lombok.Data;

@@ -2,6 +2,7 @@ package by.it_academy.service.userService;
 
 import by.it_academy.repository.api.VerificationCodeRepository;
 import by.it_academy.repository.entity.CodeEntity;
+import by.it_academy.service.userService.api.IMailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
@@ -14,13 +15,12 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class MailService {
+public class MailService implements IMailService {
 
     private final JavaMailSender mailSender;
     private final VerificationCodeRepository codeRepository;
 
     public void mail(String mail,String code) {
-
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -35,7 +35,8 @@ public class MailService {
     }
 
     public boolean verifyCode(UUID uuid, String code){
-        CodeEntity entity = codeRepository.findById(uuid).orElseThrow();
+        CodeEntity entity = codeRepository.findById(uuid).orElseThrow(()
+                -> new RuntimeException("User not found"));
        return Objects.equals(entity.getCode(),code);
     }
 }
