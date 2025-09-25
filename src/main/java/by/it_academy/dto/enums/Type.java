@@ -1,4 +1,4 @@
-package by.it_academy.dto.auditDto.enums;
+package by.it_academy.dto.enums;
 
 public enum Type {
     USER,

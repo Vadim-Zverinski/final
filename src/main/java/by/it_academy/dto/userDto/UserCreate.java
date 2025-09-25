@@ -1,7 +1,7 @@
 package by.it_academy.dto.userDto;
 
-import by.it_academy.dto.userDto.enums.UserRole;
-import by.it_academy.dto.userDto.enums.UserStatus;
+import by.it_academy.dto.enums.UserRole;
+import by.it_academy.dto.enums.UserStatus;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;

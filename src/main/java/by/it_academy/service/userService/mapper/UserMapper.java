@@ -2,10 +2,9 @@ package by.it_academy.service.userService.mapper;
 
 import by.it_academy.dto.userDto.UserCreate;
 import by.it_academy.dto.userDto.UserRegistration;
-import by.it_academy.dto.userDto.enums.UserRole;
-import by.it_academy.dto.userDto.enums.UserStatus;
+import by.it_academy.dto.enums.UserRole;
+import by.it_academy.dto.enums.UserStatus;
 import by.it_academy.repository.userRepository.entity.UserEntity;
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.security.core.userdetails.User;

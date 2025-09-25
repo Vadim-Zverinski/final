@@ -1,6 +1,6 @@
 package by.it_academy.dto.auditDto;
 
-import by.it_academy.dto.auditDto.enums.Type;
+import by.it_academy.dto.enums.Type;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;

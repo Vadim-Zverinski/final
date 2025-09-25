@@ -1,7 +1,7 @@
 package by.it_academy.service.userService;
 
 import by.it_academy.dto.userDto.UserLogin;
-import by.it_academy.dto.userDto.enums.UserStatus;
+import by.it_academy.dto.enums.UserStatus;
 import by.it_academy.repository.userRepository.api.UserRepository;
 import by.it_academy.repository.userRepository.entity.UserEntity;
 import by.it_academy.service.userService.api.ICabinetService;
