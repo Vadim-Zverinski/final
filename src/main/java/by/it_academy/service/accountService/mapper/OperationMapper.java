@@ -1,8 +1,7 @@
 package by.it_academy.service.accountService.mapper;
 
-import by.it_academy.dto.accountDto.Account;
+
 import by.it_academy.dto.accountDto.Operation;
-import by.it_academy.repository.accountRepository.entity.AccountEntity;
 import by.it_academy.repository.accountRepository.entity.OperationEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

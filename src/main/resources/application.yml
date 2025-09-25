@@ -42,7 +42,8 @@ security:
     - "/cabinet/registration"
     - "/cabinet/verification"
     - "/cabinet/login"
-    - "/cabinet/login"
+    - "GET:/classifier/currency"
+    - "GET:/operation/category"
 
 
 

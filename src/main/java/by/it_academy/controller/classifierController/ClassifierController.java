@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class ClassifierController {
 
     public final ClassifierService classifierService;
 
+    @PreAuthorize("hasRole('ADMIN','MANAGER')")
     @PostMapping("/currency")
     public ResponseEntity<String> addCurrency(@RequestBody Currency currency) {
         classifierService.createCurrency(currency);
@@ -32,7 +34,7 @@ public class ClassifierController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(classifierService.readAllCurrency(pageable));
     }
-
+    @PreAuthorize("hasRole('ADMIN','MANAGER')")
     @PostMapping("/operation/category")
     public ResponseEntity<String> addCategory(@RequestBody OperationCategory operationCategory) {
         classifierService.createOperationCategory(operationCategory);
