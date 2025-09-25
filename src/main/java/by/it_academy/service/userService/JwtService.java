@@ -1,6 +1,6 @@
 package by.it_academy.service.userService;
 
-import by.it_academy.repository.entity.UserEntity;
+import by.it_academy.repository.userRepository.entity.UserEntity;
 import by.it_academy.service.userService.api.IJwtService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;

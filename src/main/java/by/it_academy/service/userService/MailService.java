@@ -1,7 +1,7 @@
 package by.it_academy.service.userService;
 
-import by.it_academy.repository.api.VerificationCodeRepository;
-import by.it_academy.repository.entity.CodeEntity;
+import by.it_academy.repository.userRepository.api.VerificationCodeRepository;
+import by.it_academy.repository.userRepository.entity.CodeEntity;
 import by.it_academy.service.userService.api.IMailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

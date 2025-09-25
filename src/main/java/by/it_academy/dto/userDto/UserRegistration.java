@@ -1,4 +1,4 @@
-package by.it_academy.dto;
+package by.it_academy.dto.userDto;
 
 
 import lombok.Builder;

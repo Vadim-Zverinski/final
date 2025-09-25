@@ -1,4 +1,4 @@
-package by.it_academy.repository.entity;
+package by.it_academy.repository.userRepository.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

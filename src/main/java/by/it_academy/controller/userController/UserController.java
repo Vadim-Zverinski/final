@@ -1,8 +1,8 @@
-package by.it_academy.controller;
+package by.it_academy.controller.userController;
 
 import by.it_academy.dto.PageOf;
-import by.it_academy.dto.User;
-import by.it_academy.dto.UserCreate;
+import by.it_academy.dto.userDto.User;
+import by.it_academy.dto.userDto.UserCreate;
 import by.it_academy.service.userService.api.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;

@@ -1,9 +1,9 @@
 package by.it_academy.service.userService;
 
-import by.it_academy.dto.UserLogin;
-import by.it_academy.dto.enums.UserStatus;
-import by.it_academy.repository.api.UserRepository;
-import by.it_academy.repository.entity.UserEntity;
+import by.it_academy.dto.userDto.UserLogin;
+import by.it_academy.dto.userDto.enums.UserStatus;
+import by.it_academy.repository.userRepository.api.UserRepository;
+import by.it_academy.repository.userRepository.entity.UserEntity;
 import by.it_academy.service.userService.api.ICabinetService;
 import by.it_academy.service.userService.api.IJwtService;
 import by.it_academy.service.userService.api.IMailService;

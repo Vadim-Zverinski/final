@@ -1,16 +1,16 @@
-package by.it_academy.controller;
+package by.it_academy.controller.userController;
 
-import by.it_academy.dto.User;
-import by.it_academy.dto.UserLogin;
-import by.it_academy.dto.UserRegistration;
+import by.it_academy.dto.userDto.User;
+import by.it_academy.dto.userDto.UserLogin;
+import by.it_academy.dto.userDto.UserRegistration;
 import by.it_academy.service.userService.api.ICabinetService;
 import by.it_academy.service.userService.api.IJwtService;
 import by.it_academy.service.userService.api.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -22,7 +22,6 @@ public class CabinetController {
 
     public final ICabinetService cabinetService;
     public final IUserService userService;
-    public final IJwtService jwtService;
 
     @PostMapping("/registration")
     public ResponseEntity<String> registration(@RequestBody UserRegistration userRegistration) {

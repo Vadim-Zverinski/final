@@ -1,10 +1,11 @@
-package by.it_academy.service.userService.api;
+package by.it_academy.service.userService.mapper;
 
-import by.it_academy.dto.UserCreate;
-import by.it_academy.dto.UserRegistration;
-import by.it_academy.dto.enums.UserRole;
-import by.it_academy.dto.enums.UserStatus;
-import by.it_academy.repository.entity.UserEntity;
+import by.it_academy.dto.userDto.UserCreate;
+import by.it_academy.dto.userDto.UserRegistration;
+import by.it_academy.dto.userDto.enums.UserRole;
+import by.it_academy.dto.userDto.enums.UserStatus;
+import by.it_academy.repository.userRepository.entity.UserEntity;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.security.core.userdetails.User;
@@ -16,16 +17,27 @@ import java.util.List;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring", imports = {UUID.class, Instant.class, UserRole.class, UserStatus.class})
-public interface UserDetailsMapper {
+public interface UserMapper {
 
     @Mapping(target = "uuid", expression = "java(UUID.randomUUID())")
     @Mapping(target = "dtCreate", expression = "java(Instant.now().toEpochMilli())")
     @Mapping(target = "dtUpdate", expression = "java(Instant.now().toEpochMilli())")
-    @Mapping(target = "role", constant = "USER") // UserRole.USER
-    @Mapping(target = "status", constant = "WAITING_ACTIVATION") // UserStatus.WAITING_ACTIVATION
+    @Mapping(target = "role", constant = "USER")
+    @Mapping(target = "status", constant = "WAITING_ACTIVATION")
     UserCreate registrationToCreate(UserRegistration registration);
 
+
+    @Mapping(target = "uuid", source = "uuid")
+    @Mapping(target = "dtCreate", source = "time")
+    @Mapping(target = "dtUpdate", source = "time")
+    @Mapping(target = "role", constant = "USER")
+    @Mapping(target = "status", constant = "WAITING_ACTIVATION")
+    UserEntity userCreateToEntity(UserCreate dto, UUID uuid, long time);
+
+
     UserCreate toDto(UserEntity entity);
+
+    by.it_academy.dto.userDto.User toUserDto(UserEntity entity);
 
     default UserDetails toUserDetails(UserEntity user) {
         if (user == null) {

@@ -1,4 +1,4 @@
-package by.it_academy.dto.enums;
+package by.it_academy.dto.userDto.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

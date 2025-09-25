@@ -1,7 +1,6 @@
-package by.it_academy.repository.api;
+package by.it_academy.repository.userRepository.api;
 
-import by.it_academy.repository.entity.CodeEntity;
-import by.it_academy.repository.entity.UserEntity;
+import by.it_academy.repository.userRepository.entity.CodeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

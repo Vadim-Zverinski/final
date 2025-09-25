@@ -1,6 +1,6 @@
 package by.it_academy.service.userService.api;
 
-import by.it_academy.dto.UserLogin;
+import by.it_academy.dto.userDto.UserLogin;
 
 public interface ICabinetService {
 

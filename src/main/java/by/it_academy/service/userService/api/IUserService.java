@@ -1,9 +1,9 @@
 package by.it_academy.service.userService.api;
 
 import by.it_academy.dto.PageOf;
-import by.it_academy.dto.User;
-import by.it_academy.dto.UserCreate;
-import by.it_academy.dto.UserRegistration;
+import by.it_academy.dto.userDto.User;
+import by.it_academy.dto.userDto.UserCreate;
+import by.it_academy.dto.userDto.UserRegistration;
 import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
