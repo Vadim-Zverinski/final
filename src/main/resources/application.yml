@@ -42,6 +42,7 @@ security:
     - "/cabinet/registration"
     - "/cabinet/verification"
     - "/cabinet/login"
+    - "/cabinet/login"
 
 
 

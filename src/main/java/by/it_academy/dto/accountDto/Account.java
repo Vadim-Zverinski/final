@@ -1,6 +1,7 @@
 package by.it_academy.dto.accountDto;
 
-import by.it_academy.dto.accountDto.enums.AccountType;
+
+import by.it_academy.dto.enums.AccountType;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
