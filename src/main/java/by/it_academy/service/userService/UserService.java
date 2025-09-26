@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -37,6 +38,15 @@ public class UserService implements IUserService {
     @Transactional
     @Override
     public void create(UserCreate userCreate) {
+        UserEntity userEntity = userRepository.findByMail( userCreate.getMail()).orElseThrow(()
+                -> new EntityNotFoundException("User not found"));
+
+        if(Objects.equals(userCreate.getFio(),userEntity.getFio()) ||
+                Objects.equals(userCreate.getPassword(),userEntity.getPassword()))
+        {
+            throw new OptimisticLockException("User already exist");
+        }
+
         UUID uuid = UUID.randomUUID();
         long time = Instant.now().toEpochMilli();
 
@@ -53,6 +63,15 @@ public class UserService implements IUserService {
 
     @Override
     public void create(UserRegistration userRegistration) {
+        UserEntity userEntity = userRepository.findByMail( userRegistration.getMail()).orElseThrow(()
+                -> new EntityNotFoundException("User not found"));
+
+        if(Objects.equals(userRegistration.getFio(),userEntity.getFio()) ||
+                Objects.equals(userRegistration.getPassword(),userEntity.getPassword()))
+        {
+            throw new OptimisticLockException("User already exist");
+        }
+
         UserCreate user = userMapper.registrationToCreate(userRegistration);
         create(user);
         //create(userMapper.registrationToCreate(userRegistration));

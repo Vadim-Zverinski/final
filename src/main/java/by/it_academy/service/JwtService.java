@@ -1,4 +1,4 @@
-package by.it_academy.service.userService;
+package by.it_academy.service;
 
 import by.it_academy.repository.userRepository.entity.UserEntity;
 import by.it_academy.service.userService.api.IJwtService;

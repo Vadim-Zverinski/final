@@ -1,7 +1,7 @@
 package by.it_academy.filter;
 
 import by.it_academy.config.properties.JwtProperties;
-import by.it_academy.service.userService.JwtService;
+import by.it_academy.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
