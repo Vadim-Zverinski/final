@@ -7,10 +7,8 @@ import java.util.List;
 public final class ErrorFactory {
 
     private ErrorFactory() {
-        // utility class
     }
 
-    // --- Общая ошибка (всегда список) ---
     public static List<ErrorResponse> ofError(String message) {
         return List.of(
                 ErrorResponse.builder()
@@ -20,8 +18,8 @@ public final class ErrorFactory {
         );
     }
 
-    // --- Структурированная ошибка (всегда список) ---
-    public static List<StructuredErrorResponse> ofStructured(List<StructuredErrorResponse.FieldError> fieldErrors) {
+    public static List<StructuredErrorResponse> ofStructured(
+            List<StructuredErrorResponse.FieldError> fieldErrors) {
         return List.of(
                 StructuredErrorResponse.builder()
                         .logref("structured_error")
@@ -30,7 +28,6 @@ public final class ErrorFactory {
         );
     }
 
-    // --- Вспомогательный метод для полей ---
     public static StructuredErrorResponse.FieldError fieldError(String field, String message) {
         return StructuredErrorResponse.FieldError.builder()
                 .field(field)

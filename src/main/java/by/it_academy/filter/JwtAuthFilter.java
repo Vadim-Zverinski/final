@@ -45,7 +45,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.validate(token)) {
+            if (!jwtService.validate(token)) {
+                sendError(response, "JWT token invalid or expired");
+                return;
+            }
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
@@ -54,9 +57,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
+
         }
 
         filterChain.doFilter(request, response);
+    }
+    private void sendError(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+        response.setContentType("application/json");
+        response.getWriter().write("""
+                [
+                  {
+                    "logref": "error",
+                    "message": "%s"
+                  }
+                ]
+                """.formatted(message));
     }
 }
