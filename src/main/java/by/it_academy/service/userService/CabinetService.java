@@ -9,6 +9,7 @@ import by.it_academy.service.userService.api.IJwtService;
 import by.it_academy.service.userService.api.IMailService;
 import by.it_academy.service.userService.exeption.CabinetException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -20,6 +21,7 @@ public class CabinetService implements ICabinetService {
     private final UserRepository userRepository;
     private final IMailService mailService;
     private final IJwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean verify(String code, String mail) {
@@ -39,9 +41,12 @@ public class CabinetService implements ICabinetService {
         UserEntity user = userRepository.findByMail(userLogin.getMail())
                 .orElseThrow(() -> new CabinetException("User not found"));
 
-        if (!Objects.equals(user.getPassword(), userLogin.getPassword()))
-            throw new CabinetException("Invalid data");
+//        if (!Objects.equals(user.getPassword(), userLogin.getPassword()))
+//            throw new CabinetException("Invalid data");
 
+        if(!passwordEncoder.matches(userLogin.getPassword(), user.getPassword())) {
+            throw new CabinetException("Invalid data");
+        }
         return jwtService.generateToken(user);
     }
 }

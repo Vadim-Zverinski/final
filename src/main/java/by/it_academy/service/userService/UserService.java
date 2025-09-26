@@ -17,6 +17,7 @@ import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ public class UserService implements IUserService {
     private final IVerifyCodeGeneration authCode;
     private final IPager pager;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -51,6 +53,7 @@ public class UserService implements IUserService {
         long time = Instant.now().toEpochMilli();
 
         UserEntity entity = userMapper.userCreateToEntity(userCreate, uuid, time);
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         userRepository.save(entity);
 
         codeRepository.save(
