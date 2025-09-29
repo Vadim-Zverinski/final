@@ -44,6 +44,7 @@ public class SecurityConfig {
                             HttpMethod method = HttpMethod.valueOf(parts[0].trim());
                             String path = parts[1].trim();
                            auth.requestMatchers("/error").permitAll();
+                           auth.requestMatchers("/users").hasRole("ADMIN");
                            auth.requestMatchers("/cabinet/registration", "/cabinet/login").permitAll();
                             auth.requestMatchers(method, path).permitAll();
                         } else {

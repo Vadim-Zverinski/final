@@ -4,6 +4,7 @@ package by.it_academy.controller.accountController;
 import by.it_academy.dto.PageOf;
 import by.it_academy.dto.accountDto.Account;
 import by.it_academy.dto.accountDto.Operation;
+import by.it_academy.service.accountService.api.IAccountService;
 import by.it_academy.service.accountService.api.IOperationService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,11 +21,13 @@ import java.util.UUID;
 public class OperationController {
 
     private final IOperationService operationService;
+    private final AccountController accountController;
 
 
     @PostMapping("/{uuid}/operation")
     public ResponseEntity<String> create(@RequestBody Operation operation) {
-        operationService.create(operation);
+
+        operationService.create(operation,UUID.randomUUID());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

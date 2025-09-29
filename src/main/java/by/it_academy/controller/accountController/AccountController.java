@@ -4,6 +4,7 @@ import by.it_academy.dto.PageOf;
 import by.it_academy.dto.accountDto.Account;
 import by.it_academy.service.accountService.api.IAccountService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,15 @@ public class AccountController {
 
     private final IAccountService accountService;
 
+
+
     @PostMapping
     public ResponseEntity<String> create(@RequestBody Account account) {
         accountService.create(account);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+             return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
 
     @GetMapping
     public ResponseEntity<PageOf<Account>> getAll(

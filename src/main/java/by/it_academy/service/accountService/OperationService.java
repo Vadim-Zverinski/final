@@ -9,6 +9,10 @@ import by.it_academy.repository.accountRepository.api.AccountRepository;
 import by.it_academy.repository.accountRepository.api.OperationRepository;
 import by.it_academy.repository.accountRepository.entity.AccountEntity;
 import by.it_academy.repository.accountRepository.entity.OperationEntity;
+import by.it_academy.repository.classifierRepository.api.CurrencyRepository;
+import by.it_academy.repository.classifierRepository.api.OperationCategoryRepository;
+import by.it_academy.repository.classifierRepository.entity.CurrencyEntity;
+import by.it_academy.repository.classifierRepository.entity.OperationCategoryEntity;
 import by.it_academy.repository.userRepository.entity.UserEntity;
 import by.it_academy.service.accountService.api.IOperationService;
 import by.it_academy.service.accountService.mapper.OperationMapper;
@@ -34,16 +38,18 @@ public class OperationService implements IOperationService {
     private  final AccountRepository accountRepository;
     private  final OperationMapper operationMapper;
     private  final IPager pager;
+    private  final OperationCategoryRepository operationCategoryRepository;
+    private  final CurrencyRepository currencyRepository;
 
-    @Transactional
-    @Override
-    public void create(Operation operation) {
-        UUID uuid = UUID.randomUUID();
-        long time = Instant.now().toEpochMilli();
-
-        OperationEntity entity = operationMapper.toEntity(operation, uuid, time);
-        operationRepository.save(entity);
-    }
+//    @Transactional
+//    @Override
+//    public void create(Operation operation) {
+//        UUID uuid = UUID.randomUUID();
+//        long time = Instant.now().toEpochMilli();
+//
+//        OperationEntity entity = operationMapper.toEntity(operation, uuid, time);
+//        operationRepository.save(entity);
+//    }
 
     @Transactional
     @Override
@@ -61,6 +67,35 @@ public class OperationService implements IOperationService {
         entity.setCategory(operation.getCategory());
         entity.setValue(operation.getValue());
         entity.setCurrency(operation.getCurrency());
+        operationRepository.save(entity);
+    }
+
+    @Transactional
+    @Override
+    public void create(Operation operationDto, UUID accountUuid) {
+        UUID uuid = UUID.randomUUID();
+        long time = Instant.now().toEpochMilli();
+
+        // ищем аккаунт
+        AccountEntity account = accountRepository.findById(accountUuid)
+                .orElseThrow(() -> new IllegalArgumentException("Аккаунт не найден"));
+
+        // ищем категорию
+        OperationCategoryEntity category = operationCategoryRepository.findById(operationDto.getUuid())
+                .orElseThrow(() -> new IllegalArgumentException("Категория не найдена"));
+
+        // ищем валюту (если у тебя валюты отдельной таблицей)
+        CurrencyEntity currency = currencyRepository.findById(operationDto.getUuid())
+                .orElseThrow(() -> new IllegalArgumentException("Валюта не найдена"));
+
+        // маппим
+        OperationEntity entity = operationMapper.toEntity(operationDto, uuid, time);
+
+        // выставляем связи
+        entity.setAccount(account.getUser().toString());
+        entity.setCategory(category.getTitle());
+        entity.setCurrency(currency.getDescription());
+
         operationRepository.save(entity);
     }
 

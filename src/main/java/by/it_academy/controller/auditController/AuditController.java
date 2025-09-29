@@ -24,11 +24,12 @@ public class AuditController {
 
     private final IAuditService auditService;
 
+    @GetMapping("/{uuid}")
     public ResponseEntity<Audit> get(@PathVariable("uuid") UUID uuid){
         return ResponseEntity.status(HttpStatus.OK).body(auditService.read(uuid));
     }
 
-    @GetMapping("/{uuid}")
+    @GetMapping
     public ResponseEntity<PageOf<Audit>> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
