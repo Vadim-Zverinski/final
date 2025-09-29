@@ -3,6 +3,7 @@ package by.it_academy.service.classifierService;
 import by.it_academy.dto.PageOf;
 import by.it_academy.dto.classifierDto.Currency;
 import by.it_academy.dto.classifierDto.OperationCategory;
+import by.it_academy.dto.enums.Type;
 import by.it_academy.repository.classifierRepository.api.CurrencyRepository;
 import by.it_academy.repository.classifierRepository.api.OperationCategoryRepository;
 import by.it_academy.repository.classifierRepository.entity.CurrencyEntity;
@@ -10,6 +11,7 @@ import by.it_academy.repository.classifierRepository.entity.OperationCategoryEnt
 import by.it_academy.service.classifierService.api.IClassifierService;
 import by.it_academy.service.classifierService.mapper.ClassifierMapper;
 import by.it_academy.util.api.IPager;
+import by.it_academy.util.aspect.AuditType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.UUID;
 
-
+@AuditType(Type.CURRENCY)
 @Service
 @RequiredArgsConstructor
 public class ClassifierService implements IClassifierService {

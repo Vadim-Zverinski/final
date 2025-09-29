@@ -14,7 +14,7 @@ import java.util.UUID;
 @Data
 @Builder
 @Entity
-@Table(name = "audit", schema = "finance_app")
+@Table(name = "audit", schema = "fin_app")
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuditEntity {

@@ -4,6 +4,7 @@ import by.it_academy.dto.PageOf;
 import by.it_academy.dto.userDto.User;
 import by.it_academy.dto.userDto.UserCreate;
 import by.it_academy.service.userService.api.IUserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/cabinet")
+@RequestMapping("/users")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
 public class UserController {
@@ -23,7 +24,7 @@ public class UserController {
     public final IUserService userService;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody UserCreate userCreate) {
+    public ResponseEntity<String> create(@Valid @RequestBody UserCreate userCreate) {
         userService.create(userCreate);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -38,14 +39,14 @@ public class UserController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<User> get(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<User> get(@Valid  @PathVariable("uuid") UUID uuid) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.read(uuid));
     }
 
     @PutMapping("{uuid}/dt_update/{dt_update}")
-    public ResponseEntity<String> update(@PathVariable("uuid") UUID uuid,
-                                         @PathVariable("dt_update") long dtUpdate,
-                                         @RequestBody UserCreate userCreate) {
+    public ResponseEntity<String> update(@Valid @PathVariable("uuid") UUID uuid,
+                                         @Valid @PathVariable("dt_update") long dtUpdate,
+                                         @Valid @RequestBody UserCreate userCreate) {
         userService.update(uuid, dtUpdate, userCreate);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

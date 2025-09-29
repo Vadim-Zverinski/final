@@ -36,6 +36,8 @@ public interface UserMapper {
 
     UserCreate toDto(UserEntity entity);
 
+    by.it_academy.dto.userDto.User userToDto(UserEntity entity);
+
     by.it_academy.dto.userDto.User toUserDto(UserEntity entity);
 
     default UserDetails toUserDetails(UserEntity user) {

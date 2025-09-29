@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -31,6 +33,7 @@ public class SecurityConfig {
             throws Exception {
 
         http
+
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     List<String> whitelist = securityProperties.getWhitelist();
@@ -38,8 +41,10 @@ public class SecurityConfig {
                         if (entry.contains(":")) {
                             // формат "METHOD:/path"
                             String[] parts = entry.split(":", 2);
-                            HttpMethod method = HttpMethod.valueOf(parts[0]);
-                            String path = parts[1];
+                            HttpMethod method = HttpMethod.valueOf(parts[0].trim());
+                            String path = parts[1].trim();
+                           auth.requestMatchers("/error").permitAll();
+                           auth.requestMatchers("/cabinet/registration", "/cabinet/login").permitAll();
                             auth.requestMatchers(method, path).permitAll();
                         } else {
                             // формат "/path"

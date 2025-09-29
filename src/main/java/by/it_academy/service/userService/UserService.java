@@ -1,6 +1,7 @@
 package by.it_academy.service.userService;
 
 import by.it_academy.dto.PageOf;
+import by.it_academy.dto.enums.Type;
 import by.it_academy.dto.userDto.UserCreate;
 import by.it_academy.dto.userDto.User;
 import by.it_academy.dto.userDto.UserRegistration;
@@ -8,13 +9,16 @@ import by.it_academy.repository.userRepository.api.UserRepository;
 import by.it_academy.repository.userRepository.api.VerificationCodeRepository;
 import by.it_academy.repository.userRepository.entity.CodeEntity;
 import by.it_academy.repository.userRepository.entity.UserEntity;
+import by.it_academy.service.userService.api.IMailService;
 import by.it_academy.service.userService.api.IUserService;
 import by.it_academy.service.userService.mapper.UserMapper;
 import by.it_academy.util.api.IPager;
 import by.it_academy.util.api.IVerifyCodeGeneration;
+import by.it_academy.util.aspect.AuditType;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +29,7 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
-
+@AuditType(Type.USER)
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
@@ -36,43 +40,49 @@ public class UserService implements IUserService {
     private final IPager pager;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final IMailService mailService;
 
     @Transactional
     @Override
     public void create(UserCreate userCreate) {
-        UserEntity userEntity = userRepository.findByMail( userCreate.getMail()).orElseThrow(()
-                -> new EntityNotFoundException("User not found"));
-
-        if(Objects.equals(userCreate.getFio(),userEntity.getFio()) ||
-                Objects.equals(userCreate.getPassword(),userEntity.getPassword()))
-        {
-            throw new OptimisticLockException("User already exist");
+        boolean exists = userRepository.existsByMail(userCreate.getMail());
+        if (exists) {
+            throw new IllegalArgumentException("User already exists");
         }
+
+        System.out.println("User pass: " + userCreate.getPassword());
 
         UUID uuid = UUID.randomUUID();
         long time = Instant.now().toEpochMilli();
 
         UserEntity entity = userMapper.userCreateToEntity(userCreate, uuid, time);
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-        userRepository.save(entity);
+        //userRepository.save(entity);
+
+        try {
+            userRepository.save(entity);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("User already exists");
+        }
+
+        String code = authCode.generateCode();
 
         codeRepository.save(
                 CodeEntity.builder()
                         .uuid(uuid)
-                        .code(authCode.generateCode())
+                        .code(code)
                         .build()
+
         );
+
+        mailService.mail(userCreate.getMail(),code);
     }
 
     @Override
     public void create(UserRegistration userRegistration) {
-        UserEntity userEntity = userRepository.findByMail( userRegistration.getMail()).orElseThrow(()
-                -> new EntityNotFoundException("User not found"));
-
-        if(Objects.equals(userRegistration.getFio(),userEntity.getFio()) ||
-                Objects.equals(userRegistration.getPassword(),userEntity.getPassword()))
-        {
-            throw new OptimisticLockException("User already exist");
+        boolean exists = userRepository.existsByMail(userRegistration.getMail());
+        if (exists) {
+            throw new IllegalArgumentException("User already exists");
         }
 
         UserCreate user = userMapper.registrationToCreate(userRegistration);
@@ -84,10 +94,10 @@ public class UserService implements IUserService {
     @Override
     public void update(UUID uuid, long dtUpdate, UserCreate userCreate) {
         UserEntity entity = userRepository.findById(uuid).orElseThrow(()
-                -> new EntityNotFoundException("User not found"));
+                -> new IllegalArgumentException("User not found"));
 
         if (entity.getDtUpdate() != dtUpdate) {
-            throw new OptimisticLockException("User was updated");
+            throw new IllegalArgumentException("User was updated");
         }
 
         entity.setDtUpdate(userCreate.getDtUpdate());
@@ -116,7 +126,7 @@ public class UserService implements IUserService {
 //    }
     public User read(UUID uuid) {
         UserEntity entity = userRepository.findById(uuid)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         return userMapper.toUserDto(entity);
     }
@@ -127,5 +137,11 @@ public class UserService implements IUserService {
 
         return pager.getAll(
                 page.map(userMapper::toUserDto));
+    }
+
+    public User readByMail(String mail) {
+        UserEntity entity = userRepository.findByMail(mail)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userMapper.userToDto(entity);
     }
 }

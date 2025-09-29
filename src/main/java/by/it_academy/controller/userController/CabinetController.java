@@ -6,6 +6,7 @@ import by.it_academy.dto.userDto.UserRegistration;
 import by.it_academy.service.userService.api.ICabinetService;
 import by.it_academy.service.userService.api.IJwtService;
 import by.it_academy.service.userService.api.IUserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,16 +23,17 @@ public class CabinetController {
 
     public final ICabinetService cabinetService;
     public final IUserService userService;
+    public final IJwtService jwtService;
 
     @PostMapping("/registration")
-    public ResponseEntity<String> registration(@RequestBody UserRegistration userRegistration) {
+    public ResponseEntity<String> registration(@Valid @RequestBody UserRegistration userRegistration) {
         userService.create(userRegistration);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/verification")
-    public ResponseEntity<String> verification(@RequestParam String code,
-                                               @RequestParam String mail) {
+    public ResponseEntity<String> verification(@Valid @RequestParam String code,
+                                               @Valid @RequestParam String mail) {
         if (!cabinetService.verify(code, mail)) {
             throw new RuntimeException("Invalid data");
         }
@@ -39,22 +41,29 @@ public class CabinetController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLogin userLogin) {
+    public ResponseEntity<String> login(@Valid  @RequestBody UserLogin userLogin) {
+
+
         String token = cabinetService.login(userLogin);
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .build();
     }
 
-    @GetMapping(path = "/me")
+    @GetMapping("/me")
     public ResponseEntity<User> about() {
+        System.out.println("---------:--------------");
         var auth = SecurityContextHolder.getContext().getAuthentication();
+
         if (auth == null || !auth.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        UUID uuid = UUID.fromString(auth.getPrincipal().toString());
-        User user = userService.read(uuid);
+        String mail = auth.getName();
+        System.out.println("------- main:"+ mail);
+        User user = userService.readByMail(mail);
+
+        System.out.println( user.toString());
         return ResponseEntity.ok(user);
     }
 

@@ -3,6 +3,7 @@ package by.it_academy.service.accountService;
 import by.it_academy.dto.PageOf;
 import by.it_academy.dto.accountDto.Account;
 import by.it_academy.dto.accountDto.Operation;
+import by.it_academy.dto.enums.Type;
 import by.it_academy.dto.userDto.User;
 import by.it_academy.repository.accountRepository.api.AccountRepository;
 import by.it_academy.repository.accountRepository.api.OperationRepository;
@@ -12,6 +13,7 @@ import by.it_academy.repository.userRepository.entity.UserEntity;
 import by.it_academy.service.accountService.api.IOperationService;
 import by.it_academy.service.accountService.mapper.OperationMapper;
 import by.it_academy.util.api.IPager;
+import by.it_academy.util.aspect.AuditType;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.UUID;
 
+@AuditType(Type.OPERATION)
 @Service
 @RequiredArgsConstructor
 public class OperationService implements IOperationService {
@@ -46,10 +49,10 @@ public class OperationService implements IOperationService {
     @Override
     public void update(UUID uuid, long dtUpdate, Operation operation) {
         OperationEntity entity = operationRepository.findById(uuid).orElseThrow(()
-                -> new EntityNotFoundException("User not found"));
+                -> new IllegalArgumentException("User not found"));
 
         if (entity.getDtUpdate() != dtUpdate) {
-            throw new OptimisticLockException("User was updated");
+            throw new IllegalArgumentException("User was updated");
         }
 
         entity.setDtUpdate(operation.getDtUpdate());
@@ -72,7 +75,7 @@ public class OperationService implements IOperationService {
     @Override
     public void delete(UUID accountUuid, UUID operationUuid, long dtUpdate) {
         AccountEntity entity  = accountRepository.findById(accountUuid)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         entity.setDtUpdate(dtUpdate);
         accountRepository.save(entity);

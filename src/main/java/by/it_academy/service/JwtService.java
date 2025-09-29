@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 
 
 @Service
@@ -23,8 +24,8 @@ public class JwtService implements IJwtService {
     public String generateToken(UserEntity user) {
         Instant now = Instant.now();
         return Jwts.builder()
-                .subject(user.getUuid().toString())
-                .claim("mail", user.getMail())
+                .subject(user.getMail())
+                .claim("uuid", user.getUuid().toString())
                 .claim("role", user.getRole())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusSeconds(jwtProperties.getExpiration())))
@@ -69,6 +70,18 @@ public class JwtService implements IJwtService {
         return parser.build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+
+    public UUID extractUuid(String token) {
+        Claims claims = extractAllClaims(token);
+        return UUID.fromString(claims.get("uuid", String.class));
+    }
+
+
+    public UUID extractRole(String token) {
+        Claims claims = extractAllClaims(token);
+        return UUID.fromString(claims.get("role", String.class));
     }
 
     private boolean isTokenExpired(String token) {

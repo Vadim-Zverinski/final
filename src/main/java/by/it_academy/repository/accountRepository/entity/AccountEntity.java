@@ -2,45 +2,47 @@ package by.it_academy.repository.accountRepository.entity;
 
 
 import by.it_academy.dto.enums.AccountType;
+import by.it_academy.repository.userRepository.entity.UserEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(name = "account", schema = "fin_app")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class AccountEntity {
+
     @Id
-    @Column(name = "uuid")
-    private String uuid;
+    private UUID uuid;
 
-    @Column(name = "dt_create")
-    private Long dtCreate;
+    @Column(name = "dt_create", nullable = false)
+    private long dtCreate;
 
-    @Column(name = "dt_update")
-    private Long dtUpdate;
+    @Column(name = "dt_update", nullable = false)
+    private long dtUpdate;
 
-    @Column(name = "title")
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(name = "description")
+    @Column(length = 255)
     private String description;
 
-    @Column(name = "balance")
+    @Column(nullable = false)
     private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type")
+    @Column(nullable = false, length = 50)
     private AccountType type;
 
-    @Column(name = "currency_id")
+    @Column(name = "currency_id", nullable = false, length = 3)
     private String currency;
 
-    @Column(name = "user_id")
-    private String user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 }

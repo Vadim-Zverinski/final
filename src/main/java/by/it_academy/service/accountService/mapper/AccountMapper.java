@@ -13,11 +13,11 @@ import java.util.UUID;
 @Mapper(componentModel = "spring", imports = {UUID.class, Instant.class})
 public interface AccountMapper {
 
-    @Mapping(target = "uuid", expression = "java(uuid.toString())")
+    @Mapping(target = "uuid", expression = "java(uuid)")
     @Mapping(target = "dtCreate", expression = "java(time)")
     @Mapping(target = "dtUpdate", expression = "java(time)")
+    @Mapping(target = "user", ignore = true)
     AccountEntity toEntity(Account account, UUID uuid, long time);
 
     Account toDto(AccountEntity accountEntity);
-
 }

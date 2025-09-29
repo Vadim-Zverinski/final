@@ -20,17 +20,21 @@ public class Audit {
     private UUID uuid;
     private long dtCreate;
 
+
     @NotNull(message = "Пользователь обязателен")
     @Valid
     private User user;
 
+    @Valid
     @NotBlank(message = "Текст обязателен")
     @Size(max = 500, message = "Текст не должен превышать 500 символов")
     private String text;
 
+    @Valid
     @NotNull(message = "Тип обязателен")
     private Type type;
 
+    @Valid
     @NotBlank(message = "ID обязателен")
     private String id;
 

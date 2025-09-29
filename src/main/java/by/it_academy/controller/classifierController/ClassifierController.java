@@ -19,7 +19,7 @@ public class ClassifierController {
 
     public final ClassifierService classifierService;
 
-    @PreAuthorize("hasRole('ADMIN','MANAGER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/currency")
     public ResponseEntity<String> addCurrency(@RequestBody Currency currency) {
         classifierService.createCurrency(currency);
@@ -34,7 +34,7 @@ public class ClassifierController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(classifierService.readAllCurrency(pageable));
     }
-    @PreAuthorize("hasRole('ADMIN','MANAGER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/operation/category")
     public ResponseEntity<String> addCategory(@RequestBody OperationCategory operationCategory) {
         classifierService.createOperationCategory(operationCategory);

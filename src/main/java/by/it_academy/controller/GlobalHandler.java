@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.naming.AuthenticationException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestControllerAdvice
@@ -37,4 +39,20 @@ public class GlobalHandler {
                 HttpStatus.BAD_REQUEST
         );
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<List<ErrorResponse>> handleAccessDenied(AccessDeniedException ex) {
+        return new ResponseEntity<>(
+                ErrorFactory.ofError(ex.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<List<ErrorResponse>> handleAuthError(AuthenticationException ex) {
+            return new ResponseEntity<>(
+                    ErrorFactory.ofError(ex.getMessage()),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
 }

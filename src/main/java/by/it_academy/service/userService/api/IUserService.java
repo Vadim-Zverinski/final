@@ -14,5 +14,6 @@ import java.util.UUID;
     void update( UUID uuid, long dtUpdate, UserCreate userCreate);
     User read(UUID uuid);
     PageOf<User> readAll(Pageable pageable);
+    User readByMail(String mail);
 
 }
