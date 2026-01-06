@@ -5,6 +5,7 @@ import by.it_academy.dto.accountDto.Account;
 import by.it_academy.dto.accountDto.Operation;
 import by.it_academy.dto.enums.Type;
 import by.it_academy.dto.userDto.User;
+import by.it_academy.filter.config.UserDetailsImpl;
 import by.it_academy.repository.accountRepository.api.AccountRepository;
 import by.it_academy.repository.accountRepository.api.OperationRepository;
 import by.it_academy.repository.accountRepository.entity.AccountEntity;
@@ -23,6 +24,8 @@ import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,15 +44,6 @@ public class OperationService implements IOperationService {
     private  final OperationCategoryRepository operationCategoryRepository;
     private  final CurrencyRepository currencyRepository;
 
-//    @Transactional
-//    @Override
-//    public void create(Operation operation) {
-//        UUID uuid = UUID.randomUUID();
-//        long time = Instant.now().toEpochMilli();
-//
-//        OperationEntity entity = operationMapper.toEntity(operation, uuid, time);
-//        operationRepository.save(entity);
-//    }
 
     @Transactional
     @Override
@@ -72,31 +66,17 @@ public class OperationService implements IOperationService {
 
     @Transactional
     @Override
-    public void create(Operation operationDto, UUID accountUuid) {
+    public void create(Operation operationDto) {
         UUID uuid = UUID.randomUUID();
         long time = Instant.now().toEpochMilli();
 
-        // ищем аккаунт
-        AccountEntity account = accountRepository.findById(accountUuid)
-                .orElseThrow(() -> new IllegalArgumentException("Аккаунт не найден"));
 
-        // ищем категорию
-        OperationCategoryEntity category = operationCategoryRepository.findById(operationDto.getUuid())
-                .orElseThrow(() -> new IllegalArgumentException("Категория не найдена"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        UserEntity currentUser = principal.getUser();
 
-        // ищем валюту (если у тебя валюты отдельной таблицей)
-        CurrencyEntity currency = currencyRepository.findById(operationDto.getUuid())
-                .orElseThrow(() -> new IllegalArgumentException("Валюта не найдена"));
 
-        // маппим
-        OperationEntity entity = operationMapper.toEntity(operationDto, uuid, time);
-
-        // выставляем связи
-        entity.setAccount(account.getUser().toString());
-        entity.setCategory(category.getTitle());
-        entity.setCurrency(currency.getDescription());
-
-        operationRepository.save(entity);
+        //operationRepository.save(entity);
     }
 
     @Override

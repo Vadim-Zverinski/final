@@ -30,15 +30,14 @@ public class JwtService implements IJwtService {
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusSeconds(jwtProperties.getExpiration())))
                 .signWith(Keys.hmacShaKeyFor(jwtProperties
-                        .getSecret()
-                        .getBytes())
+                                .getSecret()
+                                .getBytes())
                         , SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
-        //toDo username в UserDetails использует mail, а тут передается uuid, передалать надо
     }
 
     public boolean validate(String token) {

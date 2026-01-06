@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>by.it_academia</groupId>
-	<artifactId>final</artifactId>
+	<artifactId>Graduation project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>final</name>
 	<description>Final project jd2</description>
@@ -142,3 +142,5 @@
 		</plugins>
 	</build>
 </project>
+
+

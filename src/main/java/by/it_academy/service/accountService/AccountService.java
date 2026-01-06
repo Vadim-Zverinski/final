@@ -53,13 +53,6 @@ public class AccountService implements IAccountService {
         accountRepository.save(entity);
     }
 
-//    public void create(Account account) {
-//        UUID uuid = UUID.randomUUID();
-//        long time = Instant.now().toEpochMilli();
-//
-//        AccountEntity entity = accountMapper.toEntity(account, uuid, time);
-//        accountRepository.save(entity);
-//    }
 
     @Transactional
     @Override

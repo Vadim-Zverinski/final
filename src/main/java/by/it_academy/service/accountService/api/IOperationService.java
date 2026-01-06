@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface IOperationService {
 
     //void create(Operation operation);
-    void create(Operation operationDto, UUID accountUuid);
+    void create(Operation operationDto);
     void update(UUID uuid, long dtUpdate, Operation operation);
     PageOf<Operation> readAll(Pageable pageable);
     void delete(UUID accountUuid, UUID operationUuid, long dtUpdate);

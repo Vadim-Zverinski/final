@@ -15,8 +15,6 @@ import by.it_academy.service.userService.mapper.UserMapper;
 import by.it_academy.util.api.IPager;
 import by.it_academy.util.api.IVerifyCodeGeneration;
 import by.it_academy.util.aspect.AuditType;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -26,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Objects;
 import java.util.UUID;
 
 @AuditType(Type.USER)
@@ -111,19 +108,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-//    public User read(UUID uuid) {
-//        Optional<UserEntity> user = userRepository.findById(uuid);
-//
-//        return User.builder()
-//                .uuid(uuid)
-//                .dtCreate(user.get().getDtCreate())
-//                .dtUpdate(user.get().getDtUpdate())
-//                .fio(user.get().getFio())
-//                .mail(user.get().getMail())
-//                .role(user.get().getRole())
-//                .status(user.get().getStatus())
-//                .build();
-//    }
     public User read(UUID uuid) {
         UserEntity entity = userRepository.findById(uuid)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -137,11 +121,13 @@ public class UserService implements IUserService {
 
         return pager.getAll(
                 page.map(userMapper::toUserDto));
+
     }
 
     public User readByMail(String mail) {
         UserEntity entity = userRepository.findByMail(mail)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(()  -> new IllegalArgumentException("User not found"));
         return userMapper.userToDto(entity);
     }
+
 }
